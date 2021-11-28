@@ -1,0 +1,26 @@
+.card {
+  border-radius: 10px;
+}
+.card .product-img {
+  height: 400px;
+  text-align: center;
+}
+.card .product-img img {
+  height: 100%;
+}
+.card .card-price {
+  color: red;
+  font-size: 25px;
+  font-weight: 600px;
+}
+.card .card-header {
+  font-size: 22px;
+  font-weight: 600;
+}
+.card .btn {
+  border-radius: 6px;
+}
+.card-descri {
+  overflow: hidden;
+  height: 75px;
+}

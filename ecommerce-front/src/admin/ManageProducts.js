@@ -3,6 +3,7 @@ import Layout from "../core/Layout";
 import { isAuthenticated } from "../auth";
 import { Link } from "react-router-dom";
 import { getProducts, deleteProduct } from "./apiAdmin";
+import './ManageProducts.css'
 
 const ManageProducts = () => {
     const [products, setProducts] = useState([]);
@@ -36,7 +37,7 @@ const ManageProducts = () => {
     return (
         <Layout
             title="Manage Products"
-            description="Perform CRUD on products"
+            description="All product off this store"
             className="container-fluid"
         >
             <div className="row">
@@ -51,7 +52,8 @@ const ManageProducts = () => {
                                 key={i}
                                 className="list-group-item d-flex justify-content-between align-items-center"
                             >
-                                <strong>{p.name}</strong>
+                                <strong className='product-col'>{p.name}</strong>
+                                <strong className='product-col'>{p.quantity}</strong>
                                 <Link to={`/admin/product/update/${p._id}`}>
                                     <span className="badge badge-warning badge-pill">
                                         Update
