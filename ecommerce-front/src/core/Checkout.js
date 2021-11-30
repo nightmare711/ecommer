@@ -6,6 +6,17 @@ import { isAuthenticated } from '../auth';
 import { Link } from 'react-router-dom';
 // import "braintree-web"; // not using this package
 import DropIn from 'braintree-web-drop-in-react';
+import PaypalAPI from '../core/PaypalAPI';
+
+var paypal = require('paypal-rest-sdk');
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': 'AWAF1sLnQPFQFruTesxnrOKYWt-fB3K-W9p-ts894WovHS46m5EbUt-sE3lRECCtYRpLlHmu55tYaClt',
+    'client_secret': 'EPIQ3-7X3EFJPg-Jjlh0NB5tW4cH6JbeA2bpH-RvD4ZvS2JTsR8rNCNhKNCkbh5VUI__URWWdIo1DN50'
+  });
+
+
+
 
 const Checkout = ({ products, setRun = f => f, run = undefined }) => {
     const [data, setData] = useState({
@@ -86,7 +97,7 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
                     .then(response => {
                         console.log(response);
                         // empty cart
-                        // create order
+                        // create orderk 
 
                         const createOrderData = {
                             products: products,
@@ -121,7 +132,46 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
                 setData({ ...data, error: error.message });
             });
     };
+    const createPayment =() =>{
+        var create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:3000/",
+                "cancel_url": "http://localhost:3000/"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": "toi thay hoa vang tren co xanh",
+                        "sku": "item",
+                        "price": "1.00",
+                        "currency": "USD",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "USD",
+                    "total": "1.00"
+                },
+                "description": "This is the payment description."
+            }]
+        };
+        
+        
+        paypal.payment.create(create_payment_json, function (error, payment){
+            if (error) {
+                throw error;
+            } else {
+                console.log("Create Payment Response");
+                console.log(payment);
+            }
+        });
+    }
 
+    const [checkout, setCheckout] = useState(false);
     const showDropIn = () => (
         <div onBlur={() => setData({ ...data, error: '' })}>
             {data.clientToken !== null && products.length > 0 ? (
@@ -145,9 +195,16 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
                         }}
                         onInstance={instance => (data.instance = instance)}
                     />
-                    <button onClick={buy} className="btn btn-success btn-block">
+                    
+                     {/* <Link to={`/PaypalAPI`} className="mr-2"> */}
+                        {/* <Link to={`/PaypalAPI`} className="backtohome">
+                            
+                            </Link>    */}
+                            <div className ="paypalButton">
+                     {checkout ?( <PaypalAPI />) : (
+                     <button  className="btn btn-success btn-block" onClick={() => {setCheckout(true);}}>
                         Payment
-                    </button>
+                    </button>) } </div>
                 </div>
             ) : null}
         </div>
@@ -155,7 +212,7 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
 
     const showError = error => (
         <div className="alert alert-danger" style={{ display: error ? '' : 'none' }}>
-            {error}
+            {error} 
         </div>
     );
 

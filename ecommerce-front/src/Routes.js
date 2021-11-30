@@ -17,11 +17,13 @@ import Profile from './user/Profile';
 import ManageProducts from './admin/ManageProducts';
 import UpdateProduct from './admin/UpdateProduct';
 import UpdateCategory from './admin/updateCategory';
+import PaypalAPI from './core/PaypalAPI';
 
 const Routes = () => {
     return (
         <BrowserRouter>
             <Switch>
+                <Route path="/paypal" exact component={PaypalAPI} />
                 <Route path="/" exact component={Home} />
                 <Route path="/shop" exact component={Shop} />
                 <Route path="/signin" exact component={Signin} />

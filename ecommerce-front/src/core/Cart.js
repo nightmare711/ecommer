@@ -15,6 +15,8 @@ const Cart = () => {
 
     const showItems = items => {
         return (
+           
+
             <div>
                 <h2>Your cart has {`${items.length}`} items</h2>
                 <hr />
@@ -38,7 +40,7 @@ const Cart = () => {
             Your cart is empty. <br /> <Link to="/shop">Continue shopping</Link>
         </h2>
     );
-
+  
     return (
         <Layout
             title="Shopping Cart"
