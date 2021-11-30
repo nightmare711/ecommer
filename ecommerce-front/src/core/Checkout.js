@@ -132,44 +132,7 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
                 setData({ ...data, error: error.message });
             });
     };
-    const createPayment =() =>{
-        var create_payment_json = {
-            "intent": "sale",
-            "payer": {
-                "payment_method": "paypal"
-            },
-            "redirect_urls": {
-                "return_url": "http://localhost:3000/",
-                "cancel_url": "http://localhost:3000/"
-            },
-            "transactions": [{
-                "item_list": {
-                    "items": [{
-                        "name": "toi thay hoa vang tren co xanh",
-                        "sku": "item",
-                        "price": "1.00",
-                        "currency": "USD",
-                        "quantity": 1
-                    }]
-                },
-                "amount": {
-                    "currency": "USD",
-                    "total": "1.00"
-                },
-                "description": "This is the payment description."
-            }]
-        };
-        
-        
-        paypal.payment.create(create_payment_json, function (error, payment){
-            if (error) {
-                throw error;
-            } else {
-                console.log("Create Payment Response");
-                console.log(payment);
-            }
-        });
-    }
+  
 
     const [checkout, setCheckout] = useState(false);
     const showDropIn = () => (
@@ -200,11 +163,13 @@ const Checkout = ({ products, setRun = f => f, run = undefined }) => {
                         {/* <Link to={`/PaypalAPI`} className="backtohome">
                             
                             </Link>    */}
-                            <div className ="paypalButton">
-                     {checkout ?( <PaypalAPI />) : (
+                    <div className ="paypalButton">
+                     {checkout ? 
+                     ( <PaypalAPI value = {getTotal()} />) : (
                      <button  className="btn btn-success btn-block" onClick={() => {setCheckout(true);}}>
                         Payment
-                    </button>) } </div>
+                    </button>) }
+                     </div>
                 </div>
             ) : null}
         </div>

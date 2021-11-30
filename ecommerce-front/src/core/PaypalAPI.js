@@ -1,6 +1,14 @@
-import React, { useRef, useEffect } from "react";
-export default function PaypalAPI() {
+import React, { useRef, useEffect, useState } from "react";
+import { Redirect } from "react-router";
+export default function PaypalAPI(props) {
     const paypal = useRef()
+    const [isApprove, setAprove] = useState(false);
+    const reDirecttoShop = () => {
+        if(isApprove){
+            return <Redirect to="/shop" />;
+        }
+
+    }
 
     useEffect(() => {
         window.paypal.Buttons({
@@ -12,7 +20,7 @@ export default function PaypalAPI() {
                       description: "Cool looking table",
                       amount: {
                         currency_code: "CAD",
-                        value: 650.0,
+                        value: props.value,
                       },
                     },
                   ],
@@ -21,6 +29,9 @@ export default function PaypalAPI() {
               onApprove: async (data, actions) => {
                 const order = await actions.order.capture();
                 console.log(order);
+                
+                setAprove(true);
+                
               },
               onError: (err) => {
                 console.log(err);
@@ -32,6 +43,7 @@ export default function PaypalAPI() {
     return (
         <div>
             <div ref={paypal} ></div>
+            <div className="redirectAfterPayment">{reDirecttoShop()}</div>
         </div>
     )
 
